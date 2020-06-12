@@ -7,19 +7,22 @@ import MovieList from "./MovieList";
 export default class HomeScreen extends Component {
   state = {
     search: "",
-    movieList: []
+    movieList: [],
   };
 
   SearchMovie = (value) => {
     let url = "http://www.omdbapi.com/?apikey=ac8bf643&s=" + value;
     axios.get(url).then((res) => {
-      this.setState({movieList: res.data.Search })
+      this.setState({ movieList: res.data.Search });
     });
   };
 
   handleSearchChange = (value) => {
-    // this.setState({ search: value });
     this.SearchMovie(value);
+  };
+
+  handleSelectMovie = (movie) => {    
+    this.props.navigation.push("Movie", movie);
   };
 
   render() {
@@ -30,7 +33,11 @@ export default class HomeScreen extends Component {
           placeholder="Search..."
           onChangeText={this.handleSearchChange}
         />
-        <MovieList style={styles.list} movies={this.state.movieList} />
+        <MovieList
+          style={styles.list}
+          movies={this.state.movieList}
+          onSelectMovie={this.handleSelectMovie}
+        />
       </View>
     );
   }
